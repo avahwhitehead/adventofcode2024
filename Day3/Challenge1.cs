@@ -26,6 +26,6 @@ public partial class Challenge1
 		return res;
 	}
 
-    [GeneratedRegex(@"mul\((\d+),(\d+)\)")]
-    private static partial Regex MulRegex();
+	[GeneratedRegex(@"mul\((\d+),(\d+)\)")]
+	private static partial Regex MulRegex();
 }
