@@ -40,7 +40,7 @@ public class Day1PuzzleSolution
 	}
 
 	[Fact]
-	public void Puzzle_Input_ShouldSucceed()
+	public void Challenge1()
 	{
 		// Arrange
 		var sut = new Challenge1();
@@ -49,6 +49,21 @@ public class Day1PuzzleSolution
 
 		// Act
 		var actualResult = sut.ReconcileLists(listA, listB);
+
+		// Assert
+		_testOutputHelper.WriteLine($"Result: {actualResult}");
+	}
+
+	[Fact]
+	public void Challenge2()
+	{
+		// Arrange
+		var sut = new Challenge2();
+
+		var (listA, listB) = GetInput();
+
+		// Act
+		var actualResult = sut.Solve(listA, listB);
 
 		// Assert
 		_testOutputHelper.WriteLine($"Result: {actualResult}");
