@@ -1,26 +1,18 @@
 using System;
-using JetBrains.Annotations;
+using System.IO;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Day1.Tests;
 
-[TestSubject(typeof(Challenge1))]
-public class Day1PuzzleSolution
+public class Day1PuzzleSolution(ITestOutputHelper testOutputHelper)
 {
-	private readonly ITestOutputHelper _testOutputHelper;
-
-	public Day1PuzzleSolution(ITestOutputHelper testOutputHelper)
-	{
-		_testOutputHelper = testOutputHelper;
-	}
-
 	private const string PuzzleFile = "inputs/day1.txt";
 
 	private Tuple<int[], int[]> GetInput()
 	{
 		// Read the puzzle file
-		var fileContent = System.IO.File.ReadAllText(PuzzleFile);
+		var fileContent = File.ReadAllText(PuzzleFile);
 
 		var splitContent = fileContent.Split(["\r\n", "\r", "\n"], StringSplitOptions.RemoveEmptyEntries);
 
@@ -51,7 +43,7 @@ public class Day1PuzzleSolution
 		var actualResult = sut.ReconcileLists(listA, listB);
 
 		// Assert
-		_testOutputHelper.WriteLine($"Result: {actualResult}");
+		testOutputHelper.WriteLine($"Result: {actualResult}");
 	}
 
 	[Fact]
@@ -66,6 +58,6 @@ public class Day1PuzzleSolution
 		var actualResult = sut.Solve(listA, listB);
 
 		// Assert
-		_testOutputHelper.WriteLine($"Result: {actualResult}");
+		testOutputHelper.WriteLine($"Result: {actualResult}");
 	}
 }
