@@ -26,8 +26,10 @@ public class Challenge1(Dictionary<int, SortedSet<int>> DependenciesGraph)
 
 			foreach (var pageDependency in currentPageDependencies)
 			{
+				// Dependency is not included in the page list
 				if (!allPageNumbers.Contains(pageDependency)) continue;
 
+				// Dependent appears after the dependency in the list
 				if (previousPageNumbers.Contains(pageDependency)) continue;
 
 				return false;

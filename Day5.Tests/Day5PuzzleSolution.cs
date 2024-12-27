@@ -33,4 +33,22 @@ public class Day5PuzzleSolution(ITestOutputHelper testOutputHelper)
 		// Assert
 		_testOutputHelper.WriteLine($"Result: {actualResult}");
 	}
+
+	[Fact]
+	public void Challenge2()
+	{
+		// Arrange
+		var (dependenciesGraph, pageLists) = GetInput();
+
+		var challenge1 = new Challenge1(dependenciesGraph);
+		var sut = new Challenge2(dependenciesGraph);
+
+		var unorderedPageLists = pageLists.Where(pages => !challenge1.IsOrdered(pages)).ToArray();
+
+		// Act
+		var actualResult = sut.Solve(unorderedPageLists);
+
+		// Assert
+		_testOutputHelper.WriteLine($"Result: {actualResult}");
+	}
 }
