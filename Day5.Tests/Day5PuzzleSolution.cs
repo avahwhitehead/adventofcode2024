@@ -8,22 +8,24 @@ public class Day5PuzzleSolution(ITestOutputHelper testOutputHelper)
 
 	private const string PuzzleFile = "inputs/day5.txt";
 
-	private ((int DependencyPage, int DependentPage)[] Requirements, int[][] PageLists) GetInput()
+	private (Dictionary<int, SortedSet<int>> Requirements, int[][] PageLists) GetInput()
 	{
 		// Read the puzzle file
 		var fileContent = File.ReadAllText(PuzzleFile);
 
 		// Parse to puzzle input
-		return Day5.Challenge1.Parse(fileContent);
+		var (requirements, pageLists) = Utils.Parse(fileContent);
+
+		return (Day5.Challenge1.MakeDependencyGraph(requirements), pageLists);
 	}
 
 	[Fact]
 	public void Challenge1()
 	{
 		// Arrange
-		var (requirements, pageLists) = GetInput();
+		var (dependenciesGraph, pageLists) = GetInput();
 
-		var sut = new Challenge1(requirements);
+		var sut = new Challenge1(dependenciesGraph);
 
 		// Act
 		var actualResult = sut.Solve(pageLists);

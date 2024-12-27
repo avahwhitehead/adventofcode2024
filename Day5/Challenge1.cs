@@ -1,14 +1,7 @@
 namespace Day5;
 
-public class Challenge1
+public class Challenge1(Dictionary<int, SortedSet<int>> DependenciesGraph)
 {
-	private readonly Dictionary<int, SortedSet<int>> DependenciesGraph;
-
-	public Challenge1((int DependencyPage, int DependentPage)[] pages)
-	{
-		DependenciesGraph = MakeDependencyGraph(pages);
-	}
-
 	public int Solve(IEnumerable<int[]> pageLists)
 	{
 		return pageLists
@@ -62,32 +55,5 @@ public class Challenge1
 		}
 
 		return graph;
-	}
-
-	public static ((int DependencyPage, int DependentPage)[] Requirements, int[][] PageLists) Parse(string input)
-	{
-		var lines = input.Trim('\n').Split('\n');
-
-		var requirements = new List<(int DependencyPage, int DependentPage)>();
-
-		var lineIndex = 0;
-		while (lines[lineIndex] != "")
-		{
-			var pages = lines[lineIndex]
-				.Split('|')
-				.Select(int.Parse)
-				.ToArray();
-
-			requirements.Add((pages[0], pages[1]));
-
-			lineIndex++;
-		}
-
-		var pageLists = lines
-			.Skip(lineIndex)
-			.Skip(1)
-			.Select(line => line.Split(",").Select(int.Parse).ToArray());
-
-		return (requirements.ToArray(), pageLists.ToArray());
 	}
 }

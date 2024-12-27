@@ -6,7 +6,7 @@ namespace Day5.Tests;
 public class Challenge1ExpectedInputTest
 {
 	// The dependent page depends on the dependency page
-	(int DependencyPage, int DependentPage)[] Dependencies =
+	private static readonly (int DependencyPage, int DependentPage)[] Dependencies =
 	[
 		(47, 53),
 		(97, 13),
@@ -31,11 +31,13 @@ public class Challenge1ExpectedInputTest
 		(53, 13)
 	];
 
+	private static readonly Dictionary<int, SortedSet<int>> DependenciesGraph = Challenge1.MakeDependencyGraph(Dependencies);
+
 	[Fact]
 	public void Example_Input_Should_Return_Expected_Result()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pageLists = new int[][]
 		{
@@ -101,7 +103,7 @@ public class Challenge1ExpectedInputTest
 		};
 
 		// Act
-		var result = Challenge1.Parse(inputString);
+		var result = Utils.Parse(inputString);
 
 		// Assert
 		Assert.Equal(Dependencies, result.Requirements);
@@ -148,7 +150,7 @@ public class Challenge1ExpectedInputTest
 	public void First_Example_List_Is_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 75, 47, 61, 53, 29 };
 
@@ -163,7 +165,7 @@ public class Challenge1ExpectedInputTest
 	public void Second_Example_List_Is_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 97, 61, 53, 29, 13 };
 
@@ -178,7 +180,7 @@ public class Challenge1ExpectedInputTest
 	public void Third_Example_List_Is_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 75, 29, 13 };
 
@@ -190,10 +192,10 @@ public class Challenge1ExpectedInputTest
 	}
 
 	[Fact]
-	public void Fourth_Example_List_Is_ONot_rdered_Correctly()
+	public void Fourth_Example_List_Is_Not_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 75, 97, 47, 61, 53 };
 
@@ -208,7 +210,7 @@ public class Challenge1ExpectedInputTest
 	public void Fifth_Example_List_Is_Not_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 61, 13, 29 };
 
@@ -223,7 +225,7 @@ public class Challenge1ExpectedInputTest
 	public void Sixth_Example_List_Is_Not_Ordered_Correctly()
 	{
 		// Arrange
-		var sut = new Challenge1(Dependencies);
+		var sut = new Challenge1(DependenciesGraph);
 
 		var pages = new int[] { 97, 13, 75, 29, 47 };
 
@@ -234,22 +236,3 @@ public class Challenge1ExpectedInputTest
 		Assert.False(actual);
 	}
 }
-
-/*
-[TestSubject(typeof(Challenge1))]
-public class Challenge1Test
-{
-	[Fact]
-	public void Provided_Example_Input_ShouldSucceed()
-	{
-		// Arrange
-		var sut = new Challenge1();
-
-		// Act
-		var actual = sut.Solve(inputArray);
-
-		// Assert
-		Assert.Equal(expected, actual);
-	}
-}
-*/
