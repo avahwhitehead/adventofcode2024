@@ -167,6 +167,31 @@ public class GridTest
 				);
 			});
 	}
+
+	[Theory]
+	[InlineData(0, 0, SquareContent.Obstacle)]
+	[InlineData(4, 3, SquareContent.GuardNorth)]
+	[InlineData(1, 2, SquareContent.GuardSouth)]
+	[InlineData(3, 0, SquareContent.GuardEast)]
+	[InlineData(3, 1, SquareContent.GuardWest)]
+	[InlineData(3, 1, null)]
+	public void SetSquare_should_Assign_To_Correct_Position(int x, int y, SquareContent? content)
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"...#..\n" +
+			"...#..\n" +
+			"......\n" +
+			"......\n" +
+			"......"
+		);
+
+		// Act
+		grid.SetSquare(x, y, content);
+
+		// Assert
+		Assert.Equal(content, grid.GetSquare(x, y));
+	}
 }
 
 
@@ -574,7 +599,7 @@ public class GridStepTest
 	}
 
 	[Fact]
-	public void Step_No_guard_Should_Be_Unchanged()
+	public void Step_No_Guard_Should_Be_Unchanged()
 	{
 		// Arrange
 		var grid = Grid.Parse(
@@ -596,5 +621,359 @@ public class GridStepTest
 
 		// Assert
 		Assert.Equal(expected, grid);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Stuck_In_Start()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"#...\n" +
+			".#..\n" +
+			"#^#.\n" +
+			".#.#"
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Free_North()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"#...\n" +
+			"....\n" +
+			"#^#.\n" +
+			".#.#"
+		);
+
+		const bool expected = false;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Line()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			".#..\n" +
+			"...#\n" +
+			"#^..\n" +
+			"..#."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Rectangle()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			".#....\n" +
+			"....#.\n" +
+			".^....\n" +
+			"#.....\n" +
+			"...#..\n" +
+			"......"
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Border()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			".####.\n" +
+			"#....#\n" +
+			"#.>..#\n" +
+			"#....#\n" +
+			"#....#\n" +
+			".####."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Bounce()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"..##..\n" +
+			".#..#.\n" +
+			"......\n" +
+			"......\n" +
+			".#v.#.\n" +
+			"..##.."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Complex()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"...#...\n" +
+			".#....#\n" +
+			"....#..\n" +
+			"..#.#..\n" +
+			"...#...\n" +
+			"#......\n" +
+			".^...#."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_No_Guard()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			".......\n" +
+			".......\n" +
+			".......\n" +
+			".......\n" +
+			".......\n" +
+			".......\n" +
+			"......."
+		);
+
+		const bool expected = false;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Should_Not_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			"........#.\n" +
+			"#.........\n" +
+			"......#..."
+		);
+
+		const bool expected = false;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_1_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#.#^.....\n" +
+			"........#.\n" +
+			"#.........\n" +
+			"......#..."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_2_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			"......#.#.\n" +
+			"#.........\n" +
+			"......#..."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_3_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			".......##.\n" +
+			"#.........\n" +
+			"......#..."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_4_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			"........#.\n" +
+			"##........\n" +
+			"......#..."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_5_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			"........#.\n" +
+			"#..#......\n" +
+			"......#..."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Fact]
+	public void WillGuardLoop_Provided_Example_Change_6_Should_Loop()
+	{
+		// Arrange
+		var grid = Grid.Parse(
+			"....#.....\n" +
+			".........#\n" +
+			"..........\n" +
+			"..#.......\n" +
+			".......#..\n" +
+			"..........\n" +
+			".#..^.....\n" +
+			"........#.\n" +
+			"#.........\n" +
+			"......##.."
+		);
+
+		const bool expected = true;
+
+		// Act
+		var actual = grid.WillGuardLoop();
+
+		// Assert
+		Assert.Equal(expected, actual);
 	}
 }

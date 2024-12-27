@@ -45,6 +45,41 @@ public class Grid
 		}
 	}
 
+	public bool WillGuardLoop(int maxSteps = 100)
+	{
+		var stepHistory = new HashSet<(int X, int Y, SquareContent GuardDirection)>();
+
+		if (!ContainsGuard()) return false;
+
+		var currentStep = 0;
+		do
+		{
+			var guardPosition = _guardPosition!.Value;
+			var guardDirection = GetSquare(guardPosition);
+
+			// Record the current position in the history
+			// If an identical position has been added before, we know it will loop
+			var stepData = (guardPosition.X, guardPosition.Y, guardDirection!.Value);
+			if (!stepHistory.Add(stepData)) return true;
+
+			try
+			{
+				Step();
+			}
+			catch (InfiniteLoopException)
+			{
+				return true;
+			}
+
+			// Guard has left the map
+			// No loop
+			if (!ContainsGuard()) return false;
+		} while (++currentStep < maxSteps);
+
+		// Didn't loop within the maximum number of steps
+		return false;
+	}
+
 	private void RotateGuardRight()
 	{
 		var xIndex = _guardPosition!.Value.X;
@@ -71,28 +106,30 @@ public class Grid
 		_grid[y][x] = null;
 	}
 
-	private void SetSquare(int x, int y, SquareContent? content)
+	public void SetSquare(int x, int y, SquareContent? content)
 	{
 		_grid[y][x] = content;
 	}
 
-	private void SetSquare((int X, int Y) position, SquareContent? content)
+	public void SetSquare((int X, int Y) position, SquareContent? content)
 	{
 		_grid[position.Y][position.X] = content;
 	}
 
-	private SquareContent? GetSquare(int x, int y)
+	public SquareContent? GetSquare(int x, int y)
 	{
 		return _grid[y][x];
 	}
 
-	private SquareContent? GetSquare((int X, int Y) position)
+	public SquareContent? GetSquare((int X, int Y) position)
 	{
 		return _grid[position.Y][position.X];
 	}
 
-	private void MoveGuardNorth()
+	private void MoveGuardNorth(SquareContent? originalGuardPosition = null)
 	{
+		if (originalGuardPosition == SquareContent.GuardNorth) throw new InfiniteLoopException("Guard has done a full rotation.");
+
 		// Check if the row is at the top of the grid
 		// (Guard will step off-screen)
 		if (_guardPosition!.Value.Y == 0)
@@ -119,11 +156,13 @@ public class Grid
 		// Square above is occupied
 		// (Guard turns right)
 		RotateGuardRight();
-		MoveGuardEast();
+		MoveGuardEast(originalGuardPosition ?? SquareContent.GuardNorth);
 	}
 
-	private void MoveGuardSouth()
+	private void MoveGuardSouth(SquareContent? originalGuardPosition = null)
 	{
+		if (originalGuardPosition == SquareContent.GuardSouth) throw new InfiniteLoopException("Guard has done a full rotation.");
+
 		// Check if the row is at the bottom of the grid
 		// (Guard will step off-screen)
 		if (_guardPosition!.Value.Y == _grid.Length - 1)
@@ -150,11 +189,13 @@ public class Grid
 		// Square above is occupied
 		// (Guard turns right)
 		RotateGuardRight();
-		MoveGuardWest();
+		MoveGuardWest(originalGuardPosition ?? SquareContent.GuardSouth);
 	}
 
-	private void MoveGuardEast()
+	private void MoveGuardEast(SquareContent? originalGuardPosition = null)
 	{
+		if (originalGuardPosition == SquareContent.GuardEast) throw new InfiniteLoopException("Guard has done a full rotation.");
+
 		// Check if the row is at the right of the grid
 		// (Guard will step off-screen)
 		if (_guardPosition!.Value.X == _grid[_guardPosition!.Value.X].Length - 1)
@@ -181,11 +222,13 @@ public class Grid
 		// Square above is occupied
 		// (Guard turns right)
 		RotateGuardRight();
-		MoveGuardSouth();
+		MoveGuardSouth(originalGuardPosition ?? SquareContent.GuardEast);
 	}
 
-	private void MoveGuardWest()
+	private void MoveGuardWest(SquareContent? originalGuardPosition = null)
 	{
+		if (originalGuardPosition == SquareContent.GuardWest) throw new InfiniteLoopException("Guard has done a full rotation.");
+
 		// Check if the row is at the right of the grid
 		// (Guard will step off-screen)
 		if (_guardPosition!.Value.X == 0)
@@ -212,7 +255,7 @@ public class Grid
 		// Square above is occupied
 		// (Guard turns right)
 		RotateGuardRight();
-		MoveGuardNorth();
+		MoveGuardNorth(originalGuardPosition ?? SquareContent.GuardWest);
 	}
 
 	public override string ToString()
@@ -233,6 +276,13 @@ public class Grid
 		if (grid.GridArray.Length != _grid.Length) return false;
 
 		return _grid.Zip(grid.GridArray, (a, b) => a.SequenceEqual(b)).All(b => b);
+	}
+
+	public Grid Clone()
+	{
+		return new Grid(
+			GridArray.Select(row => row.ToArray()).ToArray()
+		);
 	}
 
 	public static Grid Parse(string input)
