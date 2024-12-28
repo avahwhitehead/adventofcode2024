@@ -19,4 +19,6 @@ public class Coord(int x, int y)
 	{
 		return HashCode.Combine(X, Y);
 	}
+
+	public Coord Clone() => new Coord(X, Y);
 }

@@ -1,4 +1,3 @@
-using Day8;
 using JetBrains.Annotations;
 
 namespace Day8.Tests;
@@ -260,10 +259,10 @@ public class Challenge1Test
 		var expected2 = new Coord(expectedX2, expectedY2);
 
 		// Act
-		var (actual1, actual2) = sut.GetAntiNodes(coord1, coord2);
+		var actual = sut.GetAntiNodes(coord1, coord2).ToList();
 
 		// Assert
-		Assert.Equal(expected1, actual1);
-		Assert.Equal(expected2, actual2);
+		Assert.Equal(expected1, actual[0]);
+		Assert.Equal(expected2, actual[1]);
 	}
 }
