@@ -31,4 +31,19 @@ public class Day7PuzzleSolution(ITestOutputHelper testOutputHelper)
 		// Assert
 		_testOutputHelper.WriteLine($"Result: {actualResult}");
 	}
+
+	[Fact]
+	public void Challenge2()
+	{
+		// Arrange
+		var sut = new Challenge2();
+
+		var inputData = GetInput();
+
+		// Act
+		var actualResult = sut.Solve(inputData);
+
+		// Assert
+		_testOutputHelper.WriteLine($"Result: {actualResult}");
+	}
 }

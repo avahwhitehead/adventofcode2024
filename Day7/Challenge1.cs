@@ -4,7 +4,7 @@ public class Challenge1
 {
 	public long Solve(IEnumerable<Equation> equations)
 	{
-		return equations.Where(CanBeEvaluated).Select(e => (long)e.TestValue).Sum();
+		return equations.Where(CanBeEvaluated).Select(e => e.TestValue).Sum();
 	}
 
 	public bool CanBeEvaluated(Equation equation)
@@ -45,7 +45,7 @@ public class Challenge1
 		}
 	}
 
-	private long PerformOperation(Operation operation, long left, long right)
+	protected virtual long PerformOperation(Operation operation, long left, long right)
 	{
 		switch (operation)
 		{
@@ -58,7 +58,7 @@ public class Challenge1
 		}
 	}
 
-	private IEnumerable<Operation> GetOperations()
+	protected virtual IEnumerable<Operation> GetOperations()
 	{
 		yield return Operation.Add;
 		yield return Operation.Multiply;
@@ -69,4 +69,5 @@ public enum Operation
 {
 	Add,
 	Multiply,
+	Concatenate,
 }
