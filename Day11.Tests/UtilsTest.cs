@@ -46,34 +46,43 @@ public class UtilsTest
 	}
 
 	[Theory]
-	[InlineData(10, 1)]
-	[InlineData(99, 9)]
-	[InlineData(995244, 995)]
-	[InlineData(1000, 10)]
-	public void GetLeftHalfOfNumber_Should_Produce_Correct_results(int value, int expected)
+	[InlineData(1, 1)]
+	[InlineData(9, 1)]
+	[InlineData(10, 2)]
+	[InlineData(99, 2)]
+	[InlineData(990, 3)]
+	[InlineData(995244, 6)]
+	[InlineData(7874631, 7)]
+	public void GetNumberOfDigits_Should_Produce_Correct_results(int value, int expected)
 	{
+		/*
+		 * Note: This will fail for value 0 and below.
+		 * We do not have to worry about these values.
+		 */
+
 		// Arrange
 
 		// Act
-		var actual = Utils.GetLeftHalfOfNumber(value);
+		var actual = Utils.GetNumberOfDigits(value);
 
 		// Assert
 		Assert.Equal(expected, actual);
 	}
 
 	[Theory]
-	[InlineData(10, 0)]
-	[InlineData(99, 9)]
-	[InlineData(995244, 244)]
-	[InlineData(1000, 0)]
-	public void GetRightHalfOfNumber_Should_Produce_Correct_results(int value, int expected)
+	[InlineData(10, 1, 0)]
+	[InlineData(99, 9, 9)]
+	[InlineData(995244, 995, 244)]
+	[InlineData(1000, 10, 0)]
+	public void GetLeftHalfOfNumber_Should_Produce_Correct_results(int value, int expectedLeft, int expectedRight)
 	{
 		// Arrange
+		var numberOfDigits = Utils.GetNumberOfDigits(value);
 
 		// Act
-		var actual = Utils.GetRightHalfOfNumber(value);
+		var actual = Utils.GetHalvesOfNumber(value, numberOfDigits);
 
 		// Assert
-		Assert.Equal(expected, actual);
+		Assert.Equal(expectedLeft, actual.Left);
 	}
 }

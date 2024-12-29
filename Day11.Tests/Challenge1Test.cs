@@ -27,18 +27,15 @@ public class Challenge1Test
 	public void Step_Should_Produce_Expected_Values()
 	{
 		// Arrange
-		var input = "125 17\n";
+		var startArray = Utils.ParseInput("125 17\n");
 
-		var inputArray = Utils.ParseInput(input);
-		var sut = new Challenge1(inputArray);
-
-		long[] expected;
+		var sut = new Challenge1(startArray);
 
 		// Act
 		// Assert
 
 		sut.StepStones();
-		expected = [253000, 1, 7];
+		long[] expected = [253000, 1, 7];
 		Assert.Equal(expected, sut.Stones);
 
 		sut.StepStones();

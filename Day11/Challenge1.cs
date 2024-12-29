@@ -31,10 +31,12 @@ public class Challenge1
 			yield break;
 		}
 
-		if (Utils.DoesNumberHaveEvenNumberOfDigits(currentValue))
+		var numberOfDigits = Utils.GetNumberOfDigits(currentValue);
+		if (numberOfDigits % 2 == 0)
 		{
-			yield return Utils.GetLeftHalfOfNumber(currentValue);
-			yield return Utils.GetRightHalfOfNumber(currentValue);
+			var (left, right) = Utils.GetHalvesOfNumber(currentValue, numberOfDigits);
+			yield return left;
+			yield return right;
 			yield break;
 		}
 

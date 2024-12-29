@@ -11,22 +11,25 @@ public static class Utils
 			.ToArray();
 	}
 
+	public static int GetNumberOfDigits(long number)
+	{
+		return (int)Math.Floor(Math.Log10(number)) + 1;
+	}
+
 	public static bool DoesNumberHaveEvenNumberOfDigits(long number)
 	{
-		return number.ToString().Length % 2 == 0;
+		return GetNumberOfDigits(number) % 2 == 0;
 	}
 
-	public static long GetLeftHalfOfNumber(long number)
+	public static (long Left, long Right) GetHalvesOfNumber(long number, int numberOfDigits)
 	{
-		var str = number.ToString();
-		str = str.Substring(0, str.Length / 2);
-		return long.Parse(str);
-	}
+		var digits = numberOfDigits;
 
-	public static long GetRightHalfOfNumber(long number)
-	{
-		var str = number.ToString();
-		str = str.Substring(str.Length / 2);
-		return long.Parse(str);
+		var pow = (long)Math.Pow(10, digits >> 1);
+
+		var rightHalf = number % pow;
+		var leftHalf = (number - rightHalf) / pow;
+
+		return (leftHalf, rightHalf);
 	}
 }
