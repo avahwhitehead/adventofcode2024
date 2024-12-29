@@ -2,7 +2,7 @@ namespace Day10;
 
 public class Challenge1
 {
-	private int[][] Map;
+	protected int[][] Map;
 
 	public Challenge1(int[][] map)
 	{
@@ -25,12 +25,12 @@ public class Challenge1
 		return totalScore;
 	}
 
-	private int CalculateTrailScore(int rowIndex, int columnIndex)
+	public int CalculateTrailScore(int rowIndex, int columnIndex)
 	{
 		return FindTrailEnds(rowIndex, columnIndex).ToHashSet().Count;
 	}
 
-	private IEnumerable<Coord> FindTrailEnds(int rowIndex, int columnIndex)
+	public IEnumerable<Coord> FindTrailEnds(int rowIndex, int columnIndex)
 	{
 		var currentValue = GetValueAtPosition(rowIndex, columnIndex);
 		// Invalid position in the map
@@ -68,7 +68,7 @@ public class Challenge1
 		}
 	}
 
-	private int? GetValueAtPosition(int rowIndex, int columnIndex)
+	protected int? GetValueAtPosition(int rowIndex, int columnIndex)
 	{
 		if (rowIndex < 0 || rowIndex >= Map.Length) return null;
 		if (columnIndex < 0 || columnIndex >= Map[rowIndex].Length) return null;

@@ -1,14 +1,14 @@
 using Xunit.Abstractions;
 
-namespace Day10.Tests;
+namespace Day11.Tests;
 
-public class Day10PuzzleSolution(ITestOutputHelper testOutputHelper)
+public class Day11PuzzleSolution(ITestOutputHelper testOutputHelper)
 {
 	private readonly ITestOutputHelper _testOutputHelper = testOutputHelper;
 
-	private const string PuzzleFile = "inputs/day10.txt";
+	private const string PuzzleFile = "inputs/day11.txt";
 
-	private int[][] GetInput()
+	private long[] GetInput()
 	{
 		// Read the puzzle file
 		var fileContent = File.ReadAllText(PuzzleFile);
@@ -24,21 +24,6 @@ public class Day10PuzzleSolution(ITestOutputHelper testOutputHelper)
 		var inputData = GetInput();
 
 		var sut = new Challenge1(inputData);
-
-		// Act
-		var actualResult = sut.Solve();
-
-		// Assert
-		_testOutputHelper.WriteLine($"Result: {actualResult}");
-	}
-
-	[Fact]
-	public void Challenge2()
-	{
-		// Arrange
-		var inputData = GetInput();
-
-		var sut = new Challenge2(inputData);
 
 		// Act
 		var actualResult = sut.Solve();
