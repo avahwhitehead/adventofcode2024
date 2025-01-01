@@ -51,6 +51,111 @@ public class Region
 			.Count();
 	}
 
+	public int GetNumberOfSides()
+	{
+		if (_regionMap.Length == 0) return 0;
+
+		var horizontalSides = FindHorizontalSides();
+		var verticalSides = FindVerticalSides();
+		return horizontalSides + verticalSides;
+	}
+
+	private int FindHorizontalSides()
+	{
+		var sidesCount = 0;
+		// Count the number of horizontal sides (above/below)
+		for (var rowIndex = 0; rowIndex < _regionMap.Length; rowIndex++)
+		{
+			var sideAbove = false;
+			var sideBelow = false;
+			for (var columnIndex = 0; columnIndex < _regionMap[rowIndex].Length; columnIndex++)
+			{
+				// Not part of the region - reset the sides and skip this
+				if (!_regionMap[rowIndex][columnIndex])
+				{
+					sideAbove = false;
+					sideBelow = false;
+					continue;
+				}
+
+				// Above
+				if (rowIndex == 0 || !_regionMap[rowIndex - 1][columnIndex])
+				{
+					// There is a side above this point
+					if (!sideAbove) sidesCount++;
+					sideAbove = true;
+				}
+				else if (rowIndex > 0 && _regionMap[rowIndex - 1][columnIndex])
+				{
+					// There was a side above the previous point, but not this one
+					sideAbove = false;
+				}
+
+				// Below
+				if (rowIndex == _regionMap.Length - 1 || !_regionMap[rowIndex + 1][columnIndex])
+				{
+					// There is a side below this point
+					if (!sideBelow) sidesCount++;
+					sideBelow = true;
+				}
+				else if (rowIndex < _regionMap.Length - 1 && _regionMap[rowIndex + 1][columnIndex])
+				{
+					// There was a side below the previous point, but not this one
+					sideBelow = false;
+				}
+			}
+		}
+		return sidesCount;
+	}
+
+	private int FindVerticalSides()
+	{
+		var sidesCount = 0;
+		// Count the number of vertical sides (left/right)
+		for (var columnIndex = 0; columnIndex < _regionMap[0].Length; columnIndex++)
+		{
+			var sideLeft = false;
+			var sideRight = false;
+			foreach (var row in _regionMap)
+			{
+				// Not part of the region - reset the sides and skip this
+				if (!row[columnIndex])
+				{
+					sideLeft = false;
+					sideRight = false;
+					continue;
+				}
+
+				// Left
+				if (columnIndex == 0 || !row[columnIndex - 1])
+				{
+					// There is a side to the left of this point
+					if (!sideLeft) sidesCount++;
+					sideLeft = true;
+				}
+				else if (columnIndex > 0 && row[columnIndex - 1])
+				{
+					// There was a side to the left of the previous point
+					sideLeft = false;
+				}
+
+				// Right
+				if (columnIndex == row.Length - 1 || !row[columnIndex + 1])
+				{
+					// There is a side to the right of this point
+					if (!sideRight) sidesCount++;
+					sideRight = true;
+				}
+				else if (columnIndex < row.Length - 1 && row[columnIndex + 1])
+				{
+					// There was a side to the right of the previous point
+					sideRight = false;
+				}
+			}
+		}
+		return sidesCount;
+	}
+
 	public IEnumerable<Coord> GetCoords()
 	{
 		return GetCoords(_regionMap);

@@ -48,6 +48,28 @@ public class RegionTests
 	}
 
 	[Theory]
+	[InlineData(0, "")]
+	[InlineData(0, "0")]
+	[InlineData(4, "1")]
+	[InlineData(4, "11")]
+	[InlineData(4, "1111")]
+	[InlineData(4, "1111\n0000")]
+	[InlineData(4, "1111\n1111")]
+	[InlineData(8, "1111\n1001")]
+	[InlineData(10, "1111\n1010")]
+	public void GetNumberOfSides_Should_Produce_Correct_Values(int expected, string regionMap)
+	{
+		// Arrange
+		var region = new Region(ParseRegionMap(regionMap));
+
+		// Act
+		var actual = region.GetNumberOfSides();
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
+
+	[Theory]
 	[InlineData(true, "")]
 	[InlineData(true, "0")]
 	[InlineData(true, "1")]

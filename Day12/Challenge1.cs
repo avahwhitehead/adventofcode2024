@@ -9,7 +9,7 @@ public class Challenge1
 		Map = map.Select(s => s.ToCharArray()).ToArray();
 	}
 
-	public int Solve()
+	public virtual int Solve()
 	{
 		return GetRegions()
 			.Select(r => r.GetArea() * r.GetPerimeterLength())
