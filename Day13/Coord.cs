@@ -1,9 +1,9 @@
 namespace Day13;
 
-public class Coord(int x, int y)
+public class Coord(long x, long y)
 {
-	public int X { get; } = x;
-	public int Y { get; } = y;
+	public long X { get; set; } = x;
+	public long Y { get; set; } = y;
 
 	public override bool Equals(object? obj)
 	{

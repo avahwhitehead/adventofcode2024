@@ -55,4 +55,20 @@ public class UtilsTest
 		// Assert
 		Assert.Equal(expected, actual);
 	}
+
+	[Theory]
+	[InlineData(1, 1, 1)]
+	[InlineData(2, 1, 2)]
+	[InlineData(4, 2, 4)]
+	[InlineData(84, 7, 12)]
+	public void LowestCommonMultiple_Should_Produce_Correct_Result(int expected, int value1, int value2)
+	{
+		// Arrange
+
+		// Act
+		var actual = Utils.LowestCommonMultiple(value1, value2);
+
+		// Assert
+		Assert.Equal(expected, actual);
+	}
 }

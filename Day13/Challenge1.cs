@@ -46,8 +46,8 @@ public class Challenge1
 			var currentY = aPresses * aOffset.Y;
 
 			// Number of Button B presses required to get to the target coordinate
-			var requiredButtonBPressesX = (target.X - currentX) / bOffset.X;
-			var requiredButtonBPressesY = (target.Y - currentY) / bOffset.Y;
+			var requiredButtonBPressesX = (int) ((target.X - currentX) / bOffset.X);
+			var requiredButtonBPressesY = (int) ((target.Y - currentY) / bOffset.Y);
 
 			// Greater than the allowed maximum
 			if (requiredButtonBPressesX > MAXIMUM_BUTTON_PRESSES || requiredButtonBPressesY > MAXIMUM_BUTTON_PRESSES) continue;

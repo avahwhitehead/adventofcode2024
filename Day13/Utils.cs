@@ -48,6 +48,21 @@ public static partial class Utils
 		return machineList.ToArray();
 	}
 
+	public static int GreatestCommonFactor(int a, int b)
+	{
+		while (b != 0)
+		{
+			(a, b) = (b, a % b);
+		}
+		return a;
+	}
+
+	public static int LowestCommonMultiple(int a, int b)
+	{
+		return (a / GreatestCommonFactor(a, b)) * b;
+	}
+
+
 	[GeneratedRegex(@"X\+(\d+), Y\+(\d+)")]
 	private static partial Regex ButtonCoordinateRegex();
 
