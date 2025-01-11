@@ -2,31 +2,28 @@ namespace Day14;
 
 public class Challenge1(int gridWidth, int gridHeight)
 {
-	private readonly Coord _gridDimensions = new(gridWidth, gridHeight);
+	protected readonly Coord GridDimensions = new(gridWidth, gridHeight);
 
 	public int Solve(Robot[] robots, int numberOfSteps)
 	{
-		for (var stepCount = 0; stepCount < numberOfSteps; stepCount++)
-		{
-			Step(robots);
-		}
+		Step(robots, numberOfSteps);
 
 		return CalculateSafetyFactor(robots);
 	}
 
-	public void Step(Robot[] robots)
+	public void Step(Robot[] robots, int count = 1)
 	{
 		foreach (var robot in robots)
 		{
-			Step(robot);
+			Step(robot, count);
 		}
 	}
 
-	public void Step(Robot robot)
+	public void Step(Robot robot, int count = 1)
 	{
 		robot.Position = new Coord(
-			(robot.Position.X + robot.Velocity.X + _gridDimensions.X) % _gridDimensions.X,
-			(robot.Position.Y + robot.Velocity.Y + _gridDimensions.Y) % _gridDimensions.Y
+			(robot.Position.X + (robot.Velocity.X + GridDimensions.X) * count) % GridDimensions.X,
+			(robot.Position.Y + (robot.Velocity.Y + GridDimensions.Y) * count) % GridDimensions.Y
 		);
 	}
 
